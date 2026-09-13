@@ -290,36 +290,6 @@ h1,
     border-top: 1px solid var(--line);
 }
 
-@media (max-width: 600px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "identity"
-            "photo"
-            "details";
-    }
-
-    .hero-photo {
-        max-width: 220px;
-    }
-
-    .skill-list {
-        max-height: 300px;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        overflow-y: scroll;
-        scroll-snap-type: y mandatory;
-    }
-
-    .card {
-        scroll-snap-align: center;
-    }
-
-    .social-links {
-        justify-content: flex-start;
-    }
-}
-
 /* Experiences Page */
 .experience-section {
     padding: 4rem 0;
@@ -444,7 +414,7 @@ h1,
     flex-direction: row;
     padding: 6px 8px;
     gap: 0.5rem;
-    top: 15px;
+    top: 16px;
     right: 20px;
 }
 
@@ -464,14 +434,14 @@ h1,
     bottom: 125%;
     left: 50%;
     transform: translateX(-50%);
-    
+
     background: #222;
     color: #fff;
     padding: 6px 10px;
     border-radius: var(--radius);
     font-size: 0.8rem;
     white-space: nowrap;
-    
+
     transition: opacity 0.2s ease;
     pointer-events: none;
     z-index: 10;
@@ -502,10 +472,10 @@ h1,
     height: 16px;
     border-radius: 50%;
     display: inline-block;
-    
+
     border: 3px solid rgb(45, 135, 255);
     box-shadow: 0 0 1px 1px rgb(45, 135, 255),
-    inset 0 0 1px 1px rgb(45, 135, 255);
+        inset 0 0 1px 1px rgb(45, 135, 255);
 }
 
 .project-status .icon#released {
@@ -513,7 +483,59 @@ h1,
     height: 16px;
     border-radius: 50%;
     display: inline-block;
-    
+
     background-color: rgb(45, 135, 255);
     box-shadow: 0 0 1px 1px rgb(45, 135, 255);
+}
+
+/*TODO: MOBILE WEB INTERFACE*/
+
+@media (max-width: 600px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "identity"
+            "photo"
+            "details";
+    }
+
+    .hero-photo {
+        max-width: 220px;
+    }
+
+    .social-links {
+        justify-content: flex-start;
+    }
+
+    /* Skills */
+
+    .skill-list {
+        max-height: 300px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+    }
+
+    .skill-card {
+        scroll-snap-align: center;
+    }
+
+    /* Projects Section */
+    .project-card {
+        flex-direction: column;
+        height: fit-content;
+    }
+
+    .project-card .project-thumbnail {
+        aspect-ratio: 1 / 1;
+    }
+
+    .project-status-container {
+        padding: 3px 8px;
+        gap: 1rem;
+        background-color: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
 }
