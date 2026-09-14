@@ -153,7 +153,7 @@ MAILERS = {
 
 # Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
-    "https://user-name-myportofolio.pws.cs.ui.ac.id",
+    "https://muhammad-ziad51-myportofolio.pws.cs.ui.ac.id",
 ]
 
 CSRF_COOKIE_SECURE    = True
