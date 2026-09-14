@@ -447,6 +447,8 @@ h1,
     z-index: 10;
 }
 
+/* Project Status Icons */
+
 .project-status .icon#maintained {
     width: 16px;
     height: 16px;
@@ -487,8 +489,6 @@ h1,
     background-color: rgb(45, 135, 255);
     box-shadow: 0 0 1px 1px rgb(45, 135, 255);
 }
-
-/*TODO: MOBILE WEB INTERFACE*/
 
 @media (max-width: 600px) {
     .hero-grid {
