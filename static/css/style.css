@@ -521,7 +521,7 @@ h1,
         scroll-snap-align: center;
     }
 
-    /* Projects Section */
+    /* Projects Page */
     .project-card {
         flex-direction: column;
         height: fit-content;

@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Experience, Project # model-model yang ingin didaftarkan
+
+admin.site.register(Experience)
+admin.site.register(Project)
