@@ -26,6 +26,7 @@ class Experience(models.Model):
         return self.ended_at is None
 
 class Project(models.Model):
+
     DEVELOPMENT_STATUS = [
         ('in_development', 'In Development'),
         ('released', 'Released')
@@ -39,6 +40,17 @@ class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    preview = models.URLField(blank=True, null=True)
+    thumbnail = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
     development_status = models.CharField(max_length=32, choices=DEVELOPMENT_STATUS, default='in_development')
     maintenance_status = models.CharField(max_length=32, choices=MAINTENANCE_STATUS, default='maintained')
+    def __str__(self):
+        return self.title;
+
+    @property
+    def is_released(self):
+        return self.development_status == "released"
+
+    @property
+    def is_maintained(self):
+        return self.maintenance_status == "maintained"

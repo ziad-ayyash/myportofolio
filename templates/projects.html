@@ -18,6 +18,7 @@
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_projects' %}">Projects</a>
             </nav>
         </div>
     </header>
@@ -27,36 +28,50 @@
             <div class="container">
                 <p class="section-kicker">Stuff I've Made So Far</p>
                 <h1>Projects</h1>
+                {% load static %}
                 <div class="projects-grid">
+                    {% for project in projects_list %}
                     <div class="project-card">
-                        <img class="project-thumbnail" src="/static/img/placeholder.jpg" alt="Photo of Me">
+                        <img class="project-thumbnail" src="{% if project.thumbnail %}{% static project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}" alt="{{ project.title }} Thumbnail">
                         <article class="project-info">
                             <span class="project-type">
-                                PROJECT TYPE
+                                {{ project.type }}
                             </span>
                             <h2>
-                                PROJECT NAME
+                                {{ project.title }}
                             </h2>
                             <p class="project-description">
-                                (PROJECT DESCRIPTION) Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Distinctio odit accusamus similique cupiditate quam mollitia sit rerum ratione.
+                                {{ project.description }}
                             </p>
                             <div class="project-status-container">
                                 <span class="project-status">
+                                    {% if project.is_maintained %}
+                                    <span class="icon" id="maintained"></span>
+                                    {% else %}
                                     <span class="icon" id="deprecated"></span>
+                                    {% endif %}
                                     <span class="tooltip">
-                                        MAINTENANCE_STATUS
+                                        {{ project.get_maintenance_status_display }}
                                     </span>
                                 </span>
                                 <span class="project-status">
+                                    {% if project.is_released %}
                                     <span class="icon" id="released"></span>
+                                    {% else %}
+                                    <span class="icon" id="in-development"></span>
+                                    {% endif %}
                                     <span class="tooltip">
-                                        DEVELOPMENT_STATUS
+                                        {{ project.get_development_status_display }}
                                     </span>
                                 </span>
                             </div>
                         </article>
                     </div>
+                    {% empty %}
+                    <p class="empty-state">
+                        Projects Have Not Been Added Yet.
+                    </p>
+                    {% endfor %}
                 </div>
             </div>
         </section>

@@ -26,6 +26,6 @@ def show_experience(request):
 def show_projects(request):
     context = {
             "name": NAME,
-            "project_list": Project.objects.all(),
+            "projects_list": Project.objects.all(),
         }
     return render(request, "projects.html", context)
