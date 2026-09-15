@@ -31,8 +31,52 @@
                 {% load static %}
                 <div class="projects-grid">
                     {% for project in projects_list %}
+                    {% if project.link %}
+                    <a href="{{ project.link }}" class="project-link">
+                        <div class="project-card">
+                            <img class="project-thumbnail"
+                                src="{% if project.thumbnail %}{% project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
+                                alt="{{ project.title }} Thumbnail">
+                            <article class="project-info">
+                                <span class="project-type">
+                                    {{ project.type }}
+                                </span>
+                                <h2>
+                                    {{ project.title }}
+                                </h2>
+                                <p class="project-description">
+                                    {{ project.description }}
+                                </p>
+                                <div class="project-status-container">
+                                    <span class="project-status">
+                                        {% if project.is_maintained %}
+                                        <span class="icon" id="maintained"></span>
+                                        {% else %}
+                                        <span class="icon" id="deprecated"></span>
+                                        {% endif %}
+                                        <span class="tooltip">
+                                            {{ project.get_maintenance_status_display }}
+                                        </span>
+                                    </span>
+                                    <span class="project-status">
+                                        {% if project.is_released %}
+                                        <span class="icon" id="released"></span>
+                                        {% else %}
+                                        <span class="icon" id="in-development"></span>
+                                        {% endif %}
+                                        <span class="tooltip">
+                                            {{ project.get_development_status_display }}
+                                        </span>
+                                    </span>
+                                </div>
+                            </article>
+                        </div>
+                    </a>
+                    {% else %}
                     <div class="project-card">
-                        <img class="project-thumbnail" src="{% if project.thumbnail %}{% static project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}" alt="{{ project.title }} Thumbnail">
+                        <img class="project-thumbnail"
+                            src="{% if project.thumbnail %}{% project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
+                            alt="{{ project.title }} Thumbnail">
                         <article class="project-info">
                             <span class="project-type">
                                 {{ project.type }}
