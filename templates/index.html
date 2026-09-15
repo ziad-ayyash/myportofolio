@@ -1,68 +1,55 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
-    <header class="site-header">
-        <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav>
-                <a href="{% url 'main:show_main' %}">Profile</a>
-                <a href="{% url 'main:show_experience' %}">Experience</a>
-                <a href="{% url 'main:show_projects' %}">Projects</a>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Computer Science &middot; Universitas Indonesia</p>
-                    <h1 class="hero-name">{{ name }}</h1>
-                </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/wujud_aseli.jpg" alt="Photo of Me">
-                </div>
-                <div class="hero-details">
-                    <p class="bio">{{ bio }}</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>{{ npm }}</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>{{ study_program }}</dd>
-                        </div>
-                    </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/ziad-ayyash" class="social-link">GitHub</a>
-                        <a href="https://id.linkedin.com/in/ziad-ayyash-0695b6309" class="social-link">LinkedIn</a>
-                        <a href="mailto:ayyash0026@gmail.com" class="social-link">Email</a>
+<main>
+    <section class="hero" id="profile">
+        <div class="container hero-grid">
+            <div class="hero-identity">
+                <p class="hero-kicker">Computer Science &middot; Universitas Indonesia</p>
+                <h1 class="hero-name">{{ name }}</h1>
+            </div>
+            <div class="hero-photo">
+                <div class="photo-block"></div>
+                <img class="avatar" src="/static/img/wujud_aseli.jpg" alt="Photo of Me">
+            </div>
+            <div class="hero-details">
+                <p class="bio">{{ bio }}</p>
+                <dl class="meta-list">
+                    <div class="meta-row">
+                        <dt>NPM</dt>
+                        <dd>{{ npm }}</dd>
                     </div>
+                    <div class="meta-row">
+                        <dt>Program</dt>
+                        <dd>{{ study_program }}</dd>
+                    </div>
+                </dl>
+                <div class="social-links">
+                    <a href="https://github.com/ziad-ayyash" class="social-link">GitHub</a>
+                    <a href="https://id.linkedin.com/in/ziad-ayyash-0695b6309" class="social-link">LinkedIn</a>
+                    <a href="mailto:ayyash0026@gmail.com" class="social-link">Email</a>
                 </div>
             </div>
-        </section>
-        <section class="hero" id="skill">
-            <div class="container skill-container">
-                <h1>Skills</h1>
-                <div class="skill-list">
-                    <dl class="skill-card">
-                        <dt>Problem Solving</dt>
-                        <dd>Strives to tackle problems using unique and creative solutions.</dd>
-                    </dl>
-                    <dl class="skill-card">
-                        <dt>Programming</dt>
-                        <dd>Proficient in Python and Object-Oriented Programming with Java. Basic Knowledge of HTML5 and
-                            CSS3.</dd>
-                    </dl>
-                    <dl class="skill-card">
-                        <dt>Linguistics</dt>
-                        <dd>Proficient in foreign languages such as English and German.</dd>
-                    </dl>
-                </div>
+        </div>
+    </section>
+    <section class="hero" id="skill">
+        <div class="container skill-container">
+            <h1>Skills</h1>
+            <div class="skill-list">
+                <dl class="skill-card">
+                    <dt>Problem Solving</dt>
+                    <dd>Strives to tackle problems using unique and creative solutions.</dd>
+                </dl>
+                <dl class="skill-card">
+                    <dt>Programming</dt>
+                    <dd>Proficient in Python and Object-Oriented Programming with Java. Basic Knowledge of HTML5 and
+                        CSS3.</dd>
+                </dl>
+                <dl class="skill-card">
+                    <dt>Linguistics</dt>
+                    <dd>Proficient in foreign languages such as English and German.</dd>
+                </dl>
             </div>
-        </section>
-    </main>
-</body>
+        </div>
+    </section>
+</main>
 {% endblock content %}
