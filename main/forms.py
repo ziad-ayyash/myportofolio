@@ -24,7 +24,7 @@ class ProjectForm(ModelForm):
         widgets = {
             "title": TextInput(
                 attrs={
-                    "placeholder": "Portfolio Website",
+                    "placeholder": "Judul Proyekmu",
                     "maxlength": 255,
                 }
             ),
