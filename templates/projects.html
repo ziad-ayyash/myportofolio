@@ -7,7 +7,18 @@
     <section class="projects-section" id="projects">
         <div class="container">
             <p class="section-kicker">Stuff I've Made So Far</p>
-            <h1>Projects</h1>
+            <div class="project-header">
+                <h1>Projects</h1>
+                <a href="{% url 'main:create_project' %}" class="button project-add-button">
+                    <span aria-hidden="true">+</span>
+                    Tambah Proyek
+                </a>
+            </div>
+            <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
+                <input type="search" name="title" value="{{ title_query }}" placeholder="Cari berdasarkan nama proyek"
+                    class="project-search__input" aria-label="Cari berdasarkan nama proyek">
+                <button type="submit" class="button">Cari</button>
+            </form>
             {% load static %}
             <div class="projects-grid">
                 {% for project in projects_list %}
@@ -52,6 +63,9 @@
                         </article>
                     </div>
                 </a>
+                <div class="project-actions">
+                    {% include "components/project_delete_model.html" with project=project %}
+                </div>
                 {% else %}
                 <div class="project-card">
                     <img class="project-thumbnail"
@@ -90,6 +104,9 @@
                             </span>
                         </div>
                     </article>
+                </div>
+                <div class="project-actions">
+                    {% include "components/project_delete_model.html" with project=project %}
                 </div>
                 {% endif %}
                 {% empty %}
