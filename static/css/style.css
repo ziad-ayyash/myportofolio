@@ -358,6 +358,11 @@ h1,
     gap: 1rem;
 }
 
+.project-link {
+    color: inherit;
+    text-decoration: none;
+}
+
 .project-card {
     position: relative;
     display: flex;

@@ -35,7 +35,7 @@
                     <a href="{{ project.link }}" class="project-link">
                         <div class="project-card">
                             <img class="project-thumbnail"
-                                src="{% if project.thumbnail %}{% project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
+                                src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
                                 alt="{{ project.title }} Thumbnail">
                             <article class="project-info">
                                 <span class="project-type">
@@ -75,7 +75,7 @@
                     {% else %}
                     <div class="project-card">
                         <img class="project-thumbnail"
-                            src="{% if project.thumbnail %}{% project.thumbnail %}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
+                            src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
                             alt="{{ project.title }} Thumbnail">
                         <article class="project-info">
                             <span class="project-type">
@@ -111,6 +111,7 @@
                             </div>
                         </article>
                     </div>
+                    {% endif %}
                     {% empty %}
                     <p class="empty-state">
                         No Projects Have Been Added Yet.
