@@ -3,10 +3,11 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from main.models import Experience, Project
-from main.forms import ProjectForm
+from main.forms import ProjectForm, ExperienceForm
 import os
 
 NAME = "Ziad Ayyash"
+EXILE_LINK = "https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ"
 
 def show_main(request):
     context = {
@@ -26,6 +27,23 @@ def show_experience(request):
         "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid(): 
+        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
+            form.save()
+            messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+            return redirect("main:show_experience")
+        else:
+            return redirect(EXILE_LINK)
+
+    context = {
+        "name": "Ziad",
+        "form": form,
+    }
+    return render(request, "experience_form.html", context)
 
 def show_projects(request):
     json_response = get_projects_json(request)
@@ -53,7 +71,7 @@ def create_project(request):
             messages.success(request, "Proyek baru berhasil ditambahkan!")
             return redirect("main:show_projects")
         else:
-            return redirect("https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ")
+            return redirect(EXILE_LINK)
 
     context = {
         "name": "Ziad",
@@ -80,6 +98,6 @@ def delete_project(request, project_id):
             messages.success(request, "Project berhasil dihapus!")
             return redirect("main:show_projects")
         else:
-            return redirect("https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ")
+            return redirect(EXILE_LINK)
 
     return redirect("main:show_projects")

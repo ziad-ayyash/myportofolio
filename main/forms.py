@@ -1,6 +1,6 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput, Select
+from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, DateField, DateInput
 
-from main.models import Project
+from main.models import Project, Experience
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -56,3 +56,52 @@ class ProjectForm(ModelForm):
                 }
             ),
         }
+
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = [
+                    "title",
+                    "description",
+                    "category",
+                    "thumbnail",
+                    "ended_at",
+                ]
+        
+        labels = {
+                    "title": "Experience Title",
+                    "description": "Experience Description",
+                    "category": "Experience Category",
+                    "thumbnail": "Experience Thumbnail",
+                }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Judul Proyekmu",
+                    "maxlength": 255,
+                }
+            ),
+            "description": Textarea(
+                attrs={
+                    "placeholder": "Ceritakan Proyekmu",
+                    "rows": 3,
+                }
+            ),
+            "category": Select(),
+            "thumbnail": URLInput(
+                 attrs={
+                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+        }
+        
+    ended_at = DateField(
+            required=False,
+            widget= DateInput(
+                attrs={"type": "month"},
+                format="%Y-%m",
+            ),
+            input_formats=["%Y-%m"],
+        )
