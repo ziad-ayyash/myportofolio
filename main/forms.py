@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput
+from django.forms import ModelForm, TextInput, Textarea, URLInput, Select
 
 from main.models import Project
 
@@ -9,6 +9,8 @@ class ProjectForm(ModelForm):
             "title",
             "description",
             "type",
+            "development_status",
+            "maintenance_status",
             "link",
             "thumbnail",
         ]
@@ -17,6 +19,8 @@ class ProjectForm(ModelForm):
             "title": "Project name",
             "description": "Project description",
             "type": "Project Type",
+            "development_status": "in_development",
+            "maintenance_status": "maintained",
             "link": "URL Proyek",
             "thumbnail": "URL Gambar Proyek",
         }
@@ -39,6 +43,8 @@ class ProjectForm(ModelForm):
                     "placeholder": "Jenis Proyekmu",
                 }
             ),
+            "development_status": Select(),
+            "maintenance_status": Select(),
             "link": URLInput(
                 attrs={
                     "placeholder": "https://github.com/kakBurhan/burhanquestv4",
