@@ -19,8 +19,8 @@ class ProjectForm(ModelForm):
             "title": "Project name",
             "description": "Project description",
             "type": "Project Type",
-            "development_status": "in_development",
-            "maintenance_status": "maintained",
+            "development_status": "Development Status",
+            "maintenance_status": "Maintenance Status",
             "link": "URL Proyek",
             "thumbnail": "URL Gambar Proyek",
         }
