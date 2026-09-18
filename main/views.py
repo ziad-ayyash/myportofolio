@@ -9,6 +9,10 @@ import os
 NAME = "Ziad Ayyash"
 EXILE_LINK = "https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ"
 
+# ------------------------------------
+# ========== LANDING PAGE ============
+# ------------------------------------
+
 def show_main(request):
     context = {
         "name": NAME,
@@ -20,13 +24,30 @@ def show_main(request):
     }
     return render(request, "index.html", context)
 
+# ------------------------------------
+# ========== EXPERIENCE PAGE =========
+# ------------------------------------
 
 def show_experience(request):
+    json_response = get_experience_json()
+
+    experience = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experience = [entry.object for entry in experience]
+
     context = {
-        "name": NAME,
-        "experience_list": Experience.objects.all(),
+        "name": "Ziad Ayyash",
+        "experience_list": experience,
     }
     return render(request, "experience.html", context)
+
+def get_experience_json():
+    experience = Experience.objects.all()
+
+    experience_json = serializers.serialize("json", experience)
+    return HttpResponse(experience_json, content_type="application/json")
 
 def create_experience(request):
     form = ExperienceForm(request.POST or None)
@@ -45,6 +66,10 @@ def create_experience(request):
     }
     return render(request, "experience_form.html", context)
 
+# ------------------------------------
+# ========== PROJECTS PAGE ===========
+# ------------------------------------
+
 def show_projects(request):
     json_response = get_projects_json(request)
 
@@ -62,6 +87,16 @@ def show_projects(request):
     }
     return render(request, "projects.html", context)
 
+def get_projects_json(request):
+    title_query = request.GET.get("title", "").strip()
+    projects = Project.objects.all()
+
+    if title_query:
+        projects = projects.filter(title__icontains=title_query)
+
+    projects_json = serializers.serialize("json", projects)
+    return HttpResponse(projects_json, content_type="application/json")
+
 def create_project(request):
     form = ProjectForm(request.POST or None)
 
@@ -78,16 +113,6 @@ def create_project(request):
         "form": form,
     }
     return render(request, "projects_form.html", context)
-
-def get_projects_json(request):
-    title_query = request.GET.get("title", "").strip()
-    projects = Project.objects.all()
-
-    if title_query:
-        projects = projects.filter(title__icontains=title_query)
-
-    projects_json = serializers.serialize("json", projects)
-    return HttpResponse(projects_json, content_type="application/json")
 
 def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
