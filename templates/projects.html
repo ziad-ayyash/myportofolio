@@ -4,10 +4,10 @@
 {% endblock meta %}
 {% block content %}
 <main>
-    <section class="projects-section" id="projects">
+    <section class="page-section" id="projects">
         <div class="container">
             <p class="section-kicker">Stuff I've Made So Far</p>
-            <div class="project-header">
+            <div class="section-header">
                 <h1>Projects</h1>
                 <a href="{% url 'main:create_project' %}" class="button project-add-button">
                     <span aria-hidden="true">+</span>
@@ -28,7 +28,7 @@
                         <img class="project-thumbnail"
                             src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
                             alt="{{ project.title }} Thumbnail">
-                        <article class="project-info">
+                        <article class="project-info gradient-outline">
                             <span class="project-type">
                                 {{ project.type }}
                             </span>
@@ -41,9 +41,9 @@
                             <div class="project-status-container">
                                 <span class="project-status">
                                     {% if project.is_maintained %}
-                                    <span class="icon" id="maintained"></span>
+                                    <span class="icon maintained-icon"></span>
                                     {% else %}
-                                    <span class="icon" id="deprecated"></span>
+                                    <span class="icon deprecated-icon"></span>
                                     {% endif %}
                                     <span class="tooltip">
                                         {{ project.get_maintenance_status_display }}
@@ -51,9 +51,9 @@
                                 </span>
                                 <span class="project-status">
                                     {% if project.is_released %}
-                                    <span class="icon" id="released"></span>
+                                    <span class="icon released-icon"></span>
                                     {% else %}
-                                    <span class="icon" id="in-development"></span>
+                                    <span class="icon in-development-icon"></span>
                                     {% endif %}
                                     <span class="tooltip">
                                         {{ project.get_development_status_display }}
@@ -65,7 +65,7 @@
                     <div class="project-actions">
                         {% include "components/project_delete_model.html" with project=project %}
                         <a href="{% url 'main:edit_project' project.id %}">
-                            <button type="button" class="button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
                         </a>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         <img class="project-thumbnail"
                             src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
                             alt="{{ project.title }} Thumbnail">
-                        <article class="project-info">
+                        <article class="project-info gradient-outline">
                             <span class="project-type">
                                 {{ project.type }}
                             </span>
@@ -88,9 +88,9 @@
                             <div class="project-status-container">
                                 <span class="project-status">
                                     {% if project.is_maintained %}
-                                    <span class="icon" id="maintained"></span>
+                                    <span class="icon maintained-icon"></span>
                                     {% else %}
-                                    <span class="icon" id="deprecated"></span>
+                                    <span class="icon deprecated-icon"></span>
                                     {% endif %}
                                     <span class="tooltip">
                                         {{ project.get_maintenance_status_display }}
@@ -98,9 +98,9 @@
                                 </span>
                                 <span class="project-status">
                                     {% if project.is_released %}
-                                    <span class="icon" id="released"></span>
+                                    <span class="icon released-icon"></span>
                                     {% else %}
-                                    <span class="icon" id="in-development"></span>
+                                    <span class="icon in-development-icon"></span>
                                     {% endif %}
                                     <span class="tooltip">
                                         {{ project.get_development_status_display }}
@@ -112,7 +112,7 @@
                     <div class="project-actions">
                         {% include "components/project_delete_model.html" with project=project %}
                         <a href="{% url 'main:edit_project' project.id %}">
-                            <button type="button" class="button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
                         </a>
                     </div>
                 </div>
