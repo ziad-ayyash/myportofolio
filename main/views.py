@@ -126,3 +126,24 @@ def delete_project(request, project_id):
             return redirect(EXILE_LINK)
 
     return redirect("main:show_projects")
+
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
+            form = ProjectForm(request.POST, instance=project)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Project berhasil diperbaharui!")
+                return redirect("main:show_projects")
+        else:
+            return redirect(EXILE_LINK)
+
+    form = ProjectForm(instance=project)
+    context = {
+        "name": "Ziad",
+        "form": form,
+        "project": project
+    }
+    return render(request, "project_edit_model.html", context)
