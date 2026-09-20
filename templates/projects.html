@@ -9,7 +9,7 @@
             <p class="section-kicker">Stuff I've Made So Far</p>
             <div class="section-header">
                 <h1>Projects</h1>
-                <a href="{% url 'main:create_project' %}" class="button project-add-button">
+                <a href="{% url 'main:create_project' %}" class="button project-add-button gradient-button">
                     <span aria-hidden="true">+</span>
                     Tambah Proyek
                 </a>
@@ -17,14 +17,17 @@
             <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
                 <input type="search" name="title" value="{{ title_query }}" placeholder="Cari berdasarkan nama proyek"
                     class="project-search__input" aria-label="Cari berdasarkan nama proyek">
-                <button type="submit" class="button">Cari</button>
+                <button type="submit" class="button gradient-button gradient-outline">Cari</button>
             </form>
             {% load static %}
             <div class="projects-grid">
                 {% for project in projects_list %}
-                {% if project.link %}
                 <div class="project-container">
+                    {% if project.link %}
                     <a class="project-card project-link" href="{{ project.link }}">
+                    {% else %}
+                    <a class="project-card">
+                    {% endif %}
                         <img class="project-thumbnail"
                             src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
                             alt="{{ project.title }} Thumbnail">
@@ -63,60 +66,12 @@
                         </article>
                     </a>
                     <div class="project-actions">
-                        {% include "components/project_delete_model.html" with project=project %}
+                        {% include "components/project_delete_modal.html" with project=project %}
                         <a href="{% url 'main:edit_project' project.id %}">
                             <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
                         </a>
                     </div>
                 </div>
-                {% else %}
-                <div class="project-container">
-                    <div class="project-card">
-                        <img class="project-thumbnail"
-                            src="{% if project.thumbnail %}{{ project.thumbnail }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}"
-                            alt="{{ project.title }} Thumbnail">
-                        <article class="project-info gradient-outline">
-                            <span class="project-type">
-                                {{ project.type }}
-                            </span>
-                            <h2>
-                                {{ project.title }}
-                            </h2>
-                            <p class="project-description">
-                                {{ project.description }}
-                            </p>
-                            <div class="project-status-container">
-                                <span class="project-status">
-                                    {% if project.is_maintained %}
-                                    <span class="icon maintained-icon"></span>
-                                    {% else %}
-                                    <span class="icon deprecated-icon"></span>
-                                    {% endif %}
-                                    <span class="tooltip">
-                                        {{ project.get_maintenance_status_display }}
-                                    </span>
-                                </span>
-                                <span class="project-status">
-                                    {% if project.is_released %}
-                                    <span class="icon released-icon"></span>
-                                    {% else %}
-                                    <span class="icon in-development-icon"></span>
-                                    {% endif %}
-                                    <span class="tooltip">
-                                        {{ project.get_development_status_display }}
-                                    </span>
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="project-actions">
-                        {% include "components/project_delete_model.html" with project=project %}
-                        <a href="{% url 'main:edit_project' project.id %}">
-                            <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
-                        </a>
-                    </div>
-                </div>
-                {% endif %}
                 {% empty %}
                 <p class="empty-state">
                     No Projects Have Been Added Yet.

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block meta %}
-<title>Add Experience - {{ name }}</title>
+<title>{{ mode }} Experience - {{ name }}</title>
 {% endblock meta %}
 {% block content %}
 <main>
     <section class="page-section">
         <div class="container">
-            <h1>Add New Experience</h1>
-            <form method="post" action="{% url 'main:create_experience' %}" class="form-container">
+            <h1>{{ header }}</h1>
+            <form method="post" action="{% if experience %}{% url action experience.id %}{% else %}{% url action %}{% endif %}" class="form-container">
                 {% csrf_token %}
                 {% for field in form %}
                 <div class="form-group">
@@ -22,7 +22,7 @@
                     <label>Password</label>
                     <input type="password" name="password">
                 </div>
-                <button type="submit" class="button">Tambah Pengalaman</button>
+                <button type="submit" class="button">{{ submission_label }}</button>
                 <a href="{% url 'main:show_experience' %}" class="button button-secondary">Batal</a>
             </form>
         </div>

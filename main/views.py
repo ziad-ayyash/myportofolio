@@ -61,10 +61,52 @@ def create_experience(request):
             return redirect(EXILE_LINK)
 
     context = {
+            "name": "Ziad",
+            "form": form,
+            "mode": "Add",
+            "header": "Add Experience",
+            "action": "main:create_experience",
+            "submission_label": "Add"
+        }
+    return render(request, "forms/experience.html", context)
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
+            experience.delete()
+            messages.success(request, "Pengalaman berhasil dihapus!")
+            return redirect("main:show_experience")
+        else:
+            return redirect(EXILE_LINK)
+
+    return redirect("main:show_experience")
+
+def edit_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
+            form = ExperienceForm(request.POST, instance=experience)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Pengalaman berhasil diperbaharui!")
+                return redirect("main:show_experience")
+        else:
+            return redirect(EXILE_LINK)
+
+    form = ExperienceForm(instance=experience)
+    context = {
         "name": "Ziad",
         "form": form,
+        "experience": experience,
+        "mode": "Edit",
+        "header": "Edit Experience",
+        "action": "main:edit_experience",
+        "submission_label": "Save"
     }
-    return render(request, "experience_form.html", context)
+    return render(request, "forms/experience.html", context)
 
 # ------------------------------------
 # ========== PROJECTS PAGE ===========
@@ -111,21 +153,12 @@ def create_project(request):
     context = {
         "name": "Ziad",
         "form": form,
+        "mode": "Add",
+        "header": "Add Project",
+        "action": "main:create_project",
+        "submission_label": "Add"
     }
-    return render(request, "projects_form.html", context)
-
-def delete_project(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-
-    if request.method == "POST":
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            project.delete()
-            messages.success(request, "Project berhasil dihapus!")
-            return redirect("main:show_projects")
-        else:
-            return redirect(EXILE_LINK)
-
-    return redirect("main:show_projects")
+    return render(request, "forms/projects.html", context)
 
 def edit_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
@@ -144,6 +177,23 @@ def edit_project(request, project_id):
     context = {
         "name": "Ziad",
         "form": form,
-        "project": project
+        "project": project,
+        "mode": "Edit",
+        "header": "Edit Project",
+        "action": "main:edit_project",
+        "submission_label": "Save"
     }
-    return render(request, "project_edit_model.html", context)
+    return render(request, "forms/projects.html", context)
+
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
+            project.delete()
+            messages.success(request, "Project berhasil dihapus!")
+            return redirect("main:show_projects")
+        else:
+            return redirect(EXILE_LINK)
+
+    return redirect("main:show_projects")

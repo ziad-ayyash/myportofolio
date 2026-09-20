@@ -69,7 +69,11 @@ h1,
 
     border: 3px solid transparent;
     border-radius: var(--radius);
+    transition: transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
 
+.gradient-button {
     transition: transform 0.3s ease,
         box-shadow 0.3s ease;
 }
@@ -81,6 +85,9 @@ h1,
 
     animation: gradient-shift 10s ease infinite;
     transform: translate(0rem, 0.25rem) scale(1.05);
+
+    transition: transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* Pages */
@@ -365,6 +372,8 @@ h1,
 }
 
 .experience-card {
+    display: grid;
+    grid-template-rows: 1fr auto;
     padding: 1.25rem;
     background-color: #fff;
     border: 1px solid var(--line);
@@ -433,8 +442,13 @@ h1,
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 40px;
+    gap: 0.5rem;
     margin-top: 1rem;
+}
+
+.experience-card > .project-actions {
+    justify-items: flex-end;
+    flex-direction: row;
 }
 
 .project-actions .button {
@@ -673,11 +687,6 @@ h1,
 }
 
 /* ================= PROJECT DELETION ============= */
-.project-actions {
-    height: auto;
-    left: -50px;
-    gap: 0.1rem;
-}
 
 .project-actions .button {
     font-size: 0.85rem;
