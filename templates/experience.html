@@ -33,10 +33,13 @@
                     <p class="experience-status">Selesai</p>
                     {% endif %}
                     <div class="project-actions">
+                        {% include "components/experience_star.html" with experience=experience %}
                         {% if user.is_superuser %}
                         {% include "components/experience_delete_modal.html" with experience=experience %}
+                        {% endif %}
+                        {% if user.is_superuser or can_edit %}
                         <a href="{% url 'main:edit_experience' experience.id %}">
-                            <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="button gradient-button" title="Edit Pengalaman"><i class="fa-solid fa-pen"></i></button>
                         </a>
                         {% endif %}
                     </div>

@@ -75,7 +75,7 @@ def show_main(request):
 # ------------------------------------
 
 def show_experience(request):
-    json_response = get_experience_json()
+    json_response = get_experience_json(request)
 
     experience = serializers.deserialize(
         "json",
@@ -86,14 +86,29 @@ def show_experience(request):
     context = {
         "name": "Ziad Ayyash",
         "experience_list": experience,
+        "can_edit": request.user.has_perm('main.can_edit_experience')
     }
     return render(request, "experience.html", context)
 
-def get_experience_json():
+def get_experience_json(request):
     experience = Experience.objects.all()
 
-    experience_json = serializers.serialize("json", experience)
+    experience_json = serializers.serialize("json", experience, use_natural_foreign_keys=True)
     return HttpResponse(experience_json, content_type="application/json")
+
+@login_required(login_url="/login/")
+def toggle_experience_star(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        # Kalau akun ini sudah pernah memberi star, batalkan star-nya.
+        # Kalau belum, tambahkan star.
+        if request.user in experience.starred_by.all():
+            experience.starred_by.remove(request.user)
+        else:
+            experience.starred_by.add(request.user)
+
+    return redirect("main:show_experience")
 
 @login_required(login_url="/login/")
 def create_experience(request):
@@ -142,7 +157,7 @@ def delete_experience(request, experience_id):
 @login_required(login_url="/login/")
 def edit_experience(request, experience_id):
         
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not request.user.has_perm('main.can_edit_experience'):
         raise PermissionDenied
     
     experience = get_object_or_404(Experience, pk=experience_id)
@@ -187,6 +202,7 @@ def show_projects(request):
         "name": "Ziad Ayyash",
         "projects_list": projects,
         "title_query": title_query,
+        "can_edit": request.user.has_perm('main.can_edit_projects'),
     }
     return render(request, "projects.html", context)
 
@@ -201,7 +217,7 @@ def get_projects_json(request):
     return HttpResponse(projects_json, content_type="application/json")
 
 @login_required(login_url="/login/")
-def toggle_star(request, project_id):
+def toggle_project_star(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
@@ -243,7 +259,7 @@ def create_project(request):
 @login_required(login_url="/login/")
 def edit_project(request, project_id):
         
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not request.user.groups.filter(name='Editor').exists():
         raise PermissionDenied
     
     project = get_object_or_404(Project, pk=project_id)

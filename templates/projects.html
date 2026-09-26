@@ -71,6 +71,8 @@
                         {% include "components/project_star.html" with project=project %}
                         {% if user.is_superuser %}
                         {% include "components/project_delete_modal.html" with project=project %}
+                        {% endif %}
+                        {% if user.is_superuser or can_edit %}
                         <a href="{% url 'main:edit_project' project.id %}">
                             <button type="button" class="button gradient-button" title="Edit Proyek"><i class="fa-solid fa-pen"></i></button>
                         </a>
