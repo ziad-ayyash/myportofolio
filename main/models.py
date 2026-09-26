@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 class Experience(models.Model):
     EXPERIENCE_CHOICES = [
@@ -45,6 +46,10 @@ class Project(models.Model):
     type = models.CharField(max_length=255)
     development_status = models.CharField(max_length=32, choices=DEVELOPMENT_STATUS, default='in_development')
     maintenance_status = models.CharField(max_length=32, choices=MAINTENANCE_STATUS, default='maintained')
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_projects", blank=True
+    )
+
     def __str__(self):
         return self.title;
 
