@@ -12,7 +12,6 @@ import datetime
 import os
 
 NAME = "Ziad Ayyash"
-EXILE_LINK = "https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ"
 # ------------------------------------
 # ========= Authentication ===========
 # ------------------------------------
@@ -26,7 +25,7 @@ def register(request):
         return redirect("main:login")
 
     context = {
-        "name": "Burhan",
+        "name": NAME,
         "form": form,
     }
     return render(request, "register.html", context)
@@ -42,7 +41,7 @@ def login_user(request):
         return response
 
     context = {
-        "name": "Burhan",
+        "name": NAME,
         "form": form,
     }
     return render(request, "login.html", context)
@@ -84,7 +83,7 @@ def show_experience(request):
     experience = [entry.object for entry in experience]
 
     context = {
-        "name": "Ziad Ayyash",
+        "name": NAME,
         "experience_list": experience,
         "can_edit": request.user.has_perm('main.can_edit_experience')
     }
@@ -119,15 +118,12 @@ def create_experience(request):
     form = ExperienceForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid(): 
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            form.save()
-            messages.success(request, "Pengalaman baru berhasil ditambahkan!")
-            return redirect("main:show_experience")
-        else:
-            return redirect(EXILE_LINK)
+        form.save()
+        messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+        return redirect("main:show_experience")
 
     context = {
-            "name": "Ziad",
+            "name": NAME,
             "form": form,
             "mode": "Add",
             "header": "Add Experience",
@@ -145,12 +141,9 @@ def delete_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
 
     if request.method == "POST":
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            experience.delete()
-            messages.success(request, "Pengalaman berhasil dihapus!")
-            return redirect("main:show_experience")
-        else:
-            return redirect(EXILE_LINK)
+        experience.delete()
+        messages.success(request, "Pengalaman berhasil dihapus!")
+        return redirect("main:show_experience")
 
     return redirect("main:show_experience")
 
@@ -163,18 +156,15 @@ def edit_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
 
     if request.method == "POST":
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            form = ExperienceForm(request.POST, instance=experience)
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Pengalaman berhasil diperbaharui!")
-                return redirect("main:show_experience")
-        else:
-            return redirect(EXILE_LINK)
+        form = ExperienceForm(request.POST, instance=experience)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Pengalaman berhasil diperbaharui!")
+            return redirect("main:show_experience")
 
     form = ExperienceForm(instance=experience)
     context = {
-        "name": "Ziad",
+        "name": NAME,
         "form": form,
         "experience": experience,
         "mode": "Edit",
@@ -199,7 +189,7 @@ def show_projects(request):
     title_query = request.GET.get("title", "").strip()
 
     context = {
-        "name": "Ziad Ayyash",
+        "name": NAME,
         "projects_list": projects,
         "title_query": title_query,
         "can_edit": request.user.has_perm('main.can_edit_projects'),
@@ -239,15 +229,12 @@ def create_project(request):
     form = ProjectForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid(): 
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            form.save()
-            messages.success(request, "Proyek baru berhasil ditambahkan!")
-            return redirect("main:show_projects")
-        else:
-            return redirect(EXILE_LINK)
+        form.save()
+        messages.success(request, "Proyek baru berhasil ditambahkan!")
+        return redirect("main:show_projects")
 
     context = {
-        "name": "Ziad",
+        "name": NAME,
         "form": form,
         "mode": "Add",
         "header": "Add Project",
@@ -265,18 +252,15 @@ def edit_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            form = ProjectForm(request.POST, instance=project)
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Project berhasil diperbaharui!")
-                return redirect("main:show_projects")
-        else:
-            return redirect(EXILE_LINK)
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Project berhasil diperbaharui!")
+            return redirect("main:show_projects")
 
     form = ProjectForm(instance=project)
     context = {
-        "name": "Ziad",
+        "name": NAME,
         "form": form,
         "project": project,
         "mode": "Edit",
@@ -295,11 +279,8 @@ def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
-        if request.POST.get("password", "").strip() == os.environ.get("PASSWORD"):
-            project.delete()
-            messages.success(request, "Project berhasil dihapus!")
-            return redirect("main:show_projects")
-        else:
-            return redirect(EXILE_LINK)
+        project.delete()
+        messages.success(request, "Project berhasil dihapus!")
+        return redirect("main:show_projects")
 
     return redirect("main:show_projects")
