@@ -31,6 +31,11 @@ class Experience(models.Model):
     def is_ongoing(self):
         return self.ended_at is None
 
+    class Meta:
+        permissions = [
+            ("can_edit_experience", "Can Edit Experience"),
+        ]
+
 class Project(models.Model):
 
     DEVELOPMENT_STATUS = [
@@ -65,3 +70,8 @@ class Project(models.Model):
     @property
     def is_maintained(self):
         return self.maintenance_status == "maintained"
+
+    class Meta:
+            permissions = [
+                ("can_edit_projects", "Can Edit Projects"),
+            ]
