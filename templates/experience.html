@@ -10,10 +10,11 @@
             <div class="section-header">
                 <h1>Experience</h1>
                 {% if user.is_superuser %}
-                <a href="{% url 'main:create_experience' %}" class="button project-add-button gradient-button">
+                <button type="button" class="gradient-button button project-add-button"
+                    popovertarget="add-experience-modal">
                     <span aria-hidden="true">+</span>
                     Tambah Pengalaman
-                </a>
+                </button>
                 {% endif %}
             </div>
             <form id="experience-search-form" method="get" action="{% url 'main:show_experience' %}"
@@ -44,6 +45,11 @@
         </div>
     </section>
 </main>
+
+{% if user.is_superuser %}
+    {% include "components/experience_form_modal.html" %}
+{% endif %}
+
 <script>
     // Konfigurasi
     const BASE_EXPERIENCE_ENDPOINT = "{% url 'main:get_experience_json' %}";
@@ -181,6 +187,13 @@
         clearTimeout(searchDebounceTimer);
         searchExperience();
     });
+
+    // Close Experience Addition Option
+    function closeExperienceModal() {
+        document.getElementById("add-experience-modal").hidePopover();
+    }
+
+    
 
     // Start application
     fetchExperience(searchInput.value.trim());

@@ -80,6 +80,7 @@ def show_experience(request):
     context = {
         "name": NAME,
         "title_query": title_query,
+        "form": ExperienceForm(),
         "can_edit": request.user.has_perm('main.can_edit_experience')
     }
     return render(request, "experience.html", context)
