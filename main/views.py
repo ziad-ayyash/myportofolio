@@ -75,14 +75,21 @@ def show_main(request):
 # ------------------------------------
 
 def show_experience(request):
+    title_query = request.GET.get("title", "").strip()
+
     context = {
         "name": NAME,
+        "title_query": title_query,
         "can_edit": request.user.has_perm('main.can_edit_experience')
     }
     return render(request, "experience.html", context)
 
 def get_experience_json(request):
+    title_query = request.GET.get("title", "").strip()
     experiences = Experience.objects.all()
+
+    if title_query:
+        experiences = experiences.filter(title__icontains=title_query)
 
     # Konstruksi data JSON secara manual agar bisa menyisipkan logika Star
     data = []
@@ -98,8 +105,7 @@ def get_experience_json(request):
                 "description": experience.description,
                 "category": experience.category,
                 "thumbnail": experience.thumbnail,
-                "started_at": experience.started_at,
-                "ended_at": experience.ended_at,
+                "is_ongoing": experience.is_ongoing,
                 "star_count": starred_users.count(),
                 "is_starred": is_starred,
                 "starred_by_names": starred_by_names,
