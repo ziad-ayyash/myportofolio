@@ -96,6 +96,24 @@ def get_experience_json(request):
     experience_json = serializers.serialize("json", experience, use_natural_foreign_keys=True)
     return HttpResponse(experience_json, content_type="application/json")
 
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan pengalaman."},
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "Pengalaman berhasil ditambahkan.", "pk": str(experience.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
 @login_required(login_url="/login/")
 def toggle_experience_star(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
