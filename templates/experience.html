@@ -89,7 +89,7 @@
             : `<p class="experience-status">Selesai</p>`;
 
         const imageHtml = experience.thumbnail
-            ? `<img src="${experience.thumbnail}" alt="${experience.title} Thumbnail" class="experience-image">`
+            ? `<img src="${escapeHtml(experience.thumbnail)}" alt="${escapeHtml(experience.title)} Thumbnail" class="experience-image">`
             : '';
 
         // Dummy UUID digunakan untuk digantikan oleh ID asli dari data JSON
@@ -112,9 +112,9 @@
 
         // Komponen card
         const completeCardHtml = `
-            <span class="experience-category">${experience.category}</span>
-            <h2>${experience.title}</h2>
-            <p class="experience-description">${experience.description}</p>
+            <span class="experience-category">${escapeHtml(experience.category)}</span>
+            <h2>${escapeHtml(experience.title)}</h2>
+            <p class="experience-description">${escapeHtml(experience.description)}</p>
             ${ongoingStatusHtml}
             <div class="project-actions">
                     <form method="post" action="${starUrl}" class="star-form">
@@ -210,6 +210,16 @@
             }
         }
         return cookieValue;
+    }
+
+    // Mengubah karakter khusus HTML menjadi entity agar ditampilkan sebagai teks
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
     }
 
     // Mengirim data form ke server
