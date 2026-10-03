@@ -108,7 +108,9 @@
         const deleteHtml = IS_SUPERUSER
             ? `<form method="post" action="${deleteUrl}" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus project ini?');">Hapus</button>
+                <button type="submit" class="gradient-button button button-danger" onclick="return confirm('Yakin ingin menghapus project ini?');">
+                <i class="fa-solid fa-trash"></i>
+                </button>
             </form>`
             : '';
 
@@ -152,13 +154,12 @@
                     <form method="post" action="${starUrl}" class="star-form">
                         {% csrf_token %}
                         <button type="submit" 
-                                class="button button-star${isStarredClass}"
+                                class="gradient-button button button-star${isStarredClass}"
                                 title="${starTitle}">
-                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true"><i class="fa-solid fa-star"></i></span>
                             <span class="star-count">${project.star_count}</span>
                         </button>
                     </form>
-
                     ${deleteHtml}`;
 
         divContainerElement.append(cardElement, actionsElement)
