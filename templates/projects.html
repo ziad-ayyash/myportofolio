@@ -129,9 +129,9 @@
             ? `<button type="button" class="button button-danger" data-action="delete"
             data-id="${escapeHtml(project.id)}"><i class="fa-solid fa-trash"></i></button>` : '';
 
-        const edit = IS_SUPERUSER
+        const edit = CAN_EDIT
             ? `<button type="button" class="button gradient-button" data-action="edit"
-            popovertarget="edit-project-modal(disabled)"
+            popovertarget="edit-project-modal"
             data-id="${escapeHtml(project.id)}"><i class="fa-solid fa-pen"></i></button>` : '';
 
         const star = IS_AUTHENTICATED
