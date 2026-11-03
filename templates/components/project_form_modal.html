@@ -20,7 +20,7 @@
         <h2 id="{{ action }}-project-modal-title">
             {% if action == "edit" %}Edit Data Proyek{% else %}Tambah Proyek Baru{% endif %}
         </h2>
-        <form id="project-form"
+        <form id="{{ action }}-project-form"
               method="post"
               action="{% url 'main:create_project' %}"
               class="project-form">
@@ -39,7 +39,7 @@
                         class="button button-secondary"
                         popovertarget="{{ action }}-project-modal"
                         popovertargetaction="hide">Batal</button>
-                <button type="submit" class="button">Tambah Proyek</button>
+                <button type="submit" class="button">{% if action == "edit" %}Simpan{% else %}Tambah Proyek{% endif %}</button>
             </div>
         </form>
     </div>

@@ -68,7 +68,12 @@
     const gridContainer = document.getElementById('grid');
     const searchForm = document.getElementById('project-search-form');
     const searchInput = document.getElementById('search-input');
-    const projectForm = document.getElementById('project-form');
+    const projectForm = document.getElementById('add-project-form');
+    const PROJECT_FIELDS = ['title', 'description', 'type', 'link', 'thumbnail', 'development_status', 'maintenance_status'];
+
+    const projectEditForm = document.getElementById('edit-project-form');
+    let editedProjectId;
+
     let projectsAbortController;
     let searchDebounceTimer;
 
@@ -98,8 +103,8 @@
     }
 
     // Build Project Card
+    const formalize = (s) => s.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     function buildProjectCardElement(project) {
-
 
         const divContainerElement = document.createElement('div');
         divContainerElement.className = 'project-container';
@@ -112,11 +117,11 @@
             ? `<img class="project-thumbnail" src="${escapeHtml(project.thumbnail)}" alt="${escapeHtml(project.title)} Thumbnail">`
             : `<img class="project-thumbnail" src="{% static 'img/placeholder.jpg' %}" alt="${escapeHtml(project.title)} Thumbnail">`;
 
-        const developmentStatusHtml = project.is_released
+        const developmentStatusHtml = project.development_status === 'released'
             ? `<span class="icon released-icon"></span>`
             : `<span class="icon in-development-icon"></span>`;
 
-        const maintenaceStatusHtml = project.is_maintained
+        const maintenaceStatusHtml = project.maintenance_status === 'maintained'
             ? `<span class="icon maintained-icon"></span>`
             : `<span class="icon deprecated-icon"></span>`;
 
@@ -154,13 +159,13 @@
                                     <span class="project-status">
                                         ${maintenaceStatusHtml}
                                         <span class="tooltip">
-                                            ${project.maintenance_status}
+                                            ${formalize(project.maintenance_status)}
                                         </span>
                                     </span>
                                     <span class="project-status">
                                         ${developmentStatusHtml}
                                         <span class="tooltip">
-                                            ${project.development_status}
+                                            ${formalize(project.development_status)}
                                         </span>
                                     </span>
                                 </div>
@@ -227,9 +232,7 @@
         button.disabled = true;
         try {
             const fields = new FormData(projectForm);
-            const payload = Object.fromEntries([
-                'title', 'description', 'type', 'link', 'thumbnail',
-            ].map(name => [name, fields.get(name)]));
+            const payload = Object.fromEntries(PROJECT_FIELDS.map(name => [name, fields.get(name)]));
             await writeProject(BASE_PROJECTS_ENDPOINT, 'POST', payload);
             projectForm.reset();
             document.getElementById('add-project-modal').hidePopover();
@@ -242,25 +245,62 @@
         }
     }
 
+    async function editProject(event) {
+        event.preventDefault();
+        const button = projectEditForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+        try {
+            const fields = new FormData(projectEditForm);
+            const payload = Object.fromEntries(PROJECT_FIELDS.map(name => [name, fields.get(name)]));
+            await writeProject(projectEndpoint(DETAIL_PROJECT_ENDPOINT, editedProjectId), 'PATCH', payload);
+            projectEditForm.reset();
+            document.getElementById('edit-project-modal').hidePopover();
+            showToast('Success', 'Project updated.', 'success');
+            await fetchProjects(searchInput.value.trim());
+        } catch (error) {
+            showToast('Could not create project', error.message, 'error');
+        } finally {
+            editedProjectId = undefined;
+            button.disabled = false;
+        }
+    }
+
     if (projectForm) projectForm.addEventListener('submit', addProject);
+    if (projectEditForm) projectEditForm.addEventListener('submit', (e) => editProject(e, ));
 
     gridContainer.addEventListener('click', async function (event) {
         const button = event.target.closest('button[data-action]');
         if (!button || button.disabled) return;
         const action = button.dataset.action;
-        if (action === 'delete' && !window.confirm('Delete this project?')) return;
+        const id = button.dataset.id;
 
-        if (action === 'edit') {
-            showToast('Coming Soon.', 'feature is a work in progress', 'success');
-            return;
-        }
+        let pattern;
 
         button.disabled = true;
         try {
-            const pattern = action === 'star' ? STAR_PROJECT_ENDPOINT : DETAIL_PROJECT_ENDPOINT;
-            await writeProject(projectEndpoint(pattern, button.dataset.id),
-                action === 'star' ? 'POST' : 'DELETE');
-            showToast('Success', action === 'star' ? 'Star updated.' : 'Project deleted.', 'success');
+            switch (action) {
+                case 'delete':
+                    if (!window.confirm('Delete this project?')) return;
+                    pattern = DETAIL_PROJECT_ENDPOINT
+                    await writeProject(projectEndpoint(pattern, id), 'DELETE');
+                    break;
+                case 'edit':
+                    editedProjectId = id;
+                    writeProject(projectEndpoint(DETAIL_PROJECT_ENDPOINT, id), 'GET')
+                    .then((response) => {
+                        console.log(response);
+                        PROJECT_FIELDS.map((field) => projectEditForm[field].value = response[field]);
+                    });
+
+                    document.getElementById('edit-project-modal').showPopover();
+                    break;
+                case 'star':
+                    pattern = STAR_PROJECT_ENDPOINT;
+                    await writeProject(projectEndpoint(pattern, id), 'POST');
+                    break;
+                default:
+                    break;
+            }
             await fetchProjects(searchInput.value.trim());
         } catch (error) {
             showToast('Request failed', error.message, 'error');
