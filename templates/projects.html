@@ -288,7 +288,6 @@
                     editedProjectId = id;
                     writeProject(projectEndpoint(DETAIL_PROJECT_ENDPOINT, id), 'GET')
                     .then((response) => {
-                        console.log(response);
                         PROJECT_FIELDS.map((field) => projectEditForm[field].value = response[field]);
                     });
 
