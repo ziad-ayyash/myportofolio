@@ -1,24 +1,26 @@
-<div id="add-experience-modal"
+<div id="{{ action }}-experience-modal"
      class="project-form-modal"
      popover="auto"
      role="dialog"
      aria-modal="true"
-     aria-labelledby="add-experience-modal-title">
+     aria-labelledby="{{ action }}-experience-modal-title">
     <button type="button"
             class="project-form-modal__backdrop"
-            popovertarget="add-experience-modal"
+            popovertarget="{{ action }}-experience-modal"
             popovertargetaction="hide"
             aria-label="Tutup form tambah pengalaman"></button>
 
     <div class="project-form-modal__content">
         <button type="button"
                 class="project-form-modal__close"
-                popovertarget="add-experience-modal"
+                popovertarget="{{ action }}-experience-modal"
                 popovertargetaction="hide"
                 aria-label="Tutup form tambah pengalaman">×</button>
 
-        <h2 id="add-experience-modal-title">Tambah Pengalaman Baru</h2>
-        <form id="experience-form"
+        <h2 id="{{ action }}-experience-modal-title">
+            {% if action == "edit" %}Edit Data Pengalaman{% else %}Tambah Pengalaman Baru{% endif %}
+        </h2>
+        <form id="{{ action }}-experience-form"
               method="post"
               action="{% url 'main:create_experience' %}"
               class="project-form">
@@ -35,9 +37,9 @@
             <div class="project-form-modal__actions">
                 <button type="button"
                         class="button button-secondary"
-                        popovertarget="add-experience-modal"
+                        popovertarget="{{ action }}-experience-modal"
                         popovertargetaction="hide">Batal</button>
-                <button type="submit" class="button">Tambah Pengalaman</button>
+                <button type="submit" class="button">{% if action == "edit" %}Simpan{% else %}Tambah Pengalaman{% endif %}</button>
             </div>
         </form>
     </div>
