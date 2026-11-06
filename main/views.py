@@ -223,7 +223,7 @@ def show_projects(request):
         "name": NAME,
         "title_query": title_query,
         "form": ProjectForm(),
-        "can_edit": request.user.groups.filter(name_iexact="Editor").exists() or request.user.is_superuser,
+        "can_edit": request.user.groups.filter(name__iexact="Editor").exists() or request.user.is_superuser,
     }
     return render(request, "projects.html", context)
 
