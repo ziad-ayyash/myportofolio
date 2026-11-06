@@ -48,6 +48,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
     star_count = serializers.SerializerMethodField()
     is_starred = serializers.SerializerMethodField()
     starred_by_names = serializers.SerializerMethodField()
+    ended_at = serializers.DateTimeField(input_formats=["%Y-%m", "iso-8601"], required=False, allow_null=True)
 
     class Meta:
         model = Experience
@@ -68,9 +69,6 @@ class ExperienceSerializer(serializers.ModelSerializer):
         return strip_tags(value)
         
     def validate_category(self, value):
-        return strip_tags(value)
-
-    def validate_ended_at(self, value):
         return strip_tags(value)
 
     def get_star_count(self, obj):

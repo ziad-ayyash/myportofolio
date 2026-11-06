@@ -69,7 +69,7 @@
     const searchForm = document.getElementById('experience-search-form');
     const searchInput = document.getElementById('search-input');
     const experienceForm = document.getElementById('add-experience-form');
-    const EXPERIENCE_FIELDS = ["title", "description", "category", "thumbnail", "started_at", "ended_at"];
+    const EXPERIENCE_FIELDS = ["title", "description", "category", "thumbnail", "ended_at"];
 
     const experienceEditForm = document.getElementById('edit-experience-form');
     let editedExperienceId;
@@ -206,6 +206,8 @@
         try {
             const fields = new FormData(experienceForm);
             const payload = Object.fromEntries(EXPERIENCE_FIELDS.map(name => [name, fields.get(name)]));
+            if (payload.ended_at === "") payload.ended_at = null;
+
             await writeExperience(BASE_EXPERIENCE_ENDPOINT, 'POST', payload);
             experienceForm.reset();
             document.getElementById('add-experience-modal').hidePopover();
@@ -225,6 +227,8 @@
         try {
             const fields = new FormData(experienceEditForm);
             const payload = Object.fromEntries(EXPERIENCE_FIELDS.map(name => [name, fields.get(name)]));
+            if (payload.ended_at === "") payload.ended_at = null;
+
             await writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, editedExperienceId), 'PATCH', payload);
             experienceEditForm.reset();
             document.getElementById('edit-experience-modal').hidePopover();
@@ -261,6 +265,8 @@
                     editedExperienceId = id;
                     writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, id), 'GET')
                     .then((response) => {
+                        if (response['ended_at'])
+                            response['ended_at'] = new Date(response['ended_at']).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
                         EXPERIENCE_FIELDS.map((field) => experienceEditForm[field].value = response[field]);
                     });
 
