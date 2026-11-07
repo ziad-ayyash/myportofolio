@@ -42,7 +42,7 @@ Tugas ini dikerjakan tanpa menggunakan AI, dengan referensi sebagai berikut.
    Referensi cara memfilter nama `Groups` dari `User` secara _case-insensitive_.
 
 - [**W3Schools**](https://www.w3schools.com) | 
-  Referensi [cara akses field pada variable `payload`](https://www.w3schools.com/jsref/jsref_object_fromentries.asp) dan [cara menggunakan `.querySelector()`](https://www.w3schools.com/jsref/met_document_getelementbyid.asp).
+  Referensi [cara akses field pada variable `payload`](https://www.w3schools.com/jsref/jsref_object_fromentries.asp) dan [cara menggunakan `.querySelector()`](https://www.w3schools.com/jsref/met_document_queryselector.asp).
 
 - [**PPT SCELE Materi 08 - Django REST Framework**](https://scele.cs.ui.ac.id/mod/resource/view.php?id=225745) | 
    Referensi tambahan untuk menjawab pertanyaan reflektif.
