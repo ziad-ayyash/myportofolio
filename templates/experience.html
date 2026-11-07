@@ -48,6 +48,8 @@
 
 {% if user.is_superuser %}
     {% include "components/experience_form_modal.html" with action="add" %}
+
+    {% include "components/experience_delete_modal.html" %}
 {% endif %}
 
 {% if can_edit %}
@@ -72,7 +74,8 @@
     const EXPERIENCE_FIELDS = ["title", "description", "category", "thumbnail", "ended_at"];
 
     const experienceEditForm = document.getElementById('edit-experience-form');
-    let editedExperienceId;
+    const deleteConfirmationBtn = document.getElementById("delete-confirmation-button");
+    let targetExperienceId;
 
     let experienceAbortController;
     let searchDebounceTimer;
@@ -156,17 +159,19 @@
         return articleElement;
     }
 
-    async function fetchExperience(searchQuery = '') {
+    async function fetchExperience(searchQuery = '', show_loading = true) {
         if (experienceAbortController) experienceAbortController.abort();
         experienceAbortController = new AbortController();
         try {
-            displayPageSection({ showLoading: true });
+            if (show_loading) displayPageSection({ showLoading: true });
+
             const url = new URL(BASE_EXPERIENCE_ENDPOINT, window.location.origin);
             if (searchQuery) url.searchParams.set('title', searchQuery);
             const response = await fetch(url, {
                 headers: { Accept: 'application/json' },
                 signal: experienceAbortController.signal,
             });
+            
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const experiences = await response.json();
             gridContainer.replaceChildren(...experiences.map(buildExperienceCardElement));
@@ -212,7 +217,7 @@
             experienceForm.reset();
             document.getElementById('add-experience-modal').hidePopover();
             showToast('Success', 'Experience created.', 'success');
-            await fetchExperience(searchInput.value.trim());
+            await fetchExperience(searchInput.value.trim(), false);
         } catch (error) {
             showToast('Could not create experience', error.message, 'error');
         } finally {
@@ -229,25 +234,40 @@
             const payload = Object.fromEntries(EXPERIENCE_FIELDS.map(name => [name, fields.get(name)]));
             if (payload.ended_at === "") payload.ended_at = null;
 
-            await writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, editedExperienceId), 'PATCH', payload);
+            await writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, targetExperienceId), 'PATCH', payload);
             experienceEditForm.reset();
             document.getElementById('edit-experience-modal').hidePopover();
             showToast('Success', 'Experience updated.', 'success');
-            await fetchExperience(searchInput.value.trim());
+            await fetchExperience(searchInput.value.trim(), false);
         } catch (error) {
             showToast('Could not create experience', error.message, 'error');
         } finally {
-            editedExperienceId = undefined;
+            targetExperienceId = undefined;
             button.disabled = false;
         }
     }
 
+    async function removeExperience(event) {
+        try {
+            await writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, targetExperienceId), 'DELETE');
+            showToast('Success', 'Experience removed.', 'success');
+            await fetchExperience(searchInput.value.trim(), false);
+        } catch (error) {
+            showToast('Could not delete experience', error.message, 'error');
+        } finally {
+            document.getElementById('delete-experience-modal').hidePopover();
+            targetExperienceId = undefined;
+        }
+    }
+
     if (experienceForm) experienceForm.addEventListener('submit', addExperience);
-    if (experienceEditForm) experienceEditForm.addEventListener('submit', (e) => editExperience(e, ));
+    if (experienceEditForm) experienceEditForm.addEventListener('submit', editExperience);
+    if (deleteConfirmationBtn) deleteConfirmationBtn.addEventListener('click', removeExperience);
 
     gridContainer.addEventListener('click', async function (event) {
         const button = event.target.closest('button[data-action]');
         if (!button || button.disabled) return;
+        const card = event.target.closest('.experience-card');
         const action = button.dataset.action;
         const id = button.dataset.id;
 
@@ -257,20 +277,21 @@
         try {
             switch (action) {
                 case 'delete':
-                    if (!window.confirm('Delete this experience?')) return;
-                    pattern = DETAIL_EXPERIENCE_ENDPOINT
-                    await writeExperience(experienceEndpoint(pattern, id), 'DELETE');
+                    targetExperienceId = id;
+                    const modal = document.getElementById("delete-experience-modal");
+                    modal.querySelector('#experience-delete-title').innerText = card.querySelector('h2').innerText;
+                    modal.showPopover();
                     break;
                 case 'edit':
-                    editedExperienceId = id;
+                    targetExperienceId = id;
                     writeExperience(experienceEndpoint(DETAIL_EXPERIENCE_ENDPOINT, id), 'GET')
                     .then((response) => {
                         if (response['ended_at'])
                             response['ended_at'] = new Date(response['ended_at']).toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
                         EXPERIENCE_FIELDS.map((field) => experienceEditForm[field].value = response[field]);
-                    });
 
-                    document.getElementById('edit-experience-modal').showPopover();
+                        document.getElementById('edit-experience-modal').showPopover();
+                    });
                     break;
                 case 'star':
                     pattern = STAR_EXPERIENCE_ENDPOINT;
@@ -279,7 +300,9 @@
                 default:
                     break;
             }
-            await fetchExperience(searchInput.value.trim());
+
+            await fetchExperience(searchInput.value.trim(), false);
+
         } catch (error) {
             showToast('Request failed', error.message, 'error');
         } finally {
